@@ -1,0 +1,200 @@
+service: transport-company
+
+plugins:
+  - serverless-offline
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-north-1
+  environment:
+    DB_HOST: ${env:DB_HOST}
+    DB_PORT: ${env:DB_PORT}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    DB_NAME: ${env:DB_NAME}
+
+functions:
+  getTransports:
+    handler: dist/handlers/v1/transports/getTransports.handler
+    events:
+      - http:
+          path: /api/v1/transports
+          method: get
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  getTransport:
+    handler: dist/handlers/v1/transports/id/getTransport.handler
+    events:
+      - http:
+          path: /api/v1/transports/{id}
+          method: get
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  createTransport:
+    handler: dist/handlers/v1/transports/createTransport.handler
+    events:
+      - http:
+          path: /api/v1/transports
+          method: post
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  deleteTransport:
+    handler: dist/handlers/v1/transports/id/deleteTransport.handler
+    events:
+      - http:
+          path: /api/v1/transports/{id}
+          method: delete
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  getRoutesByStatus:
+    handler: dist/handlers/v1/routes/status/status/getRoutesByStatus.handler
+    events:
+      - http:
+          path: /api/v1/routes/status/{status}
+          method: get
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  getRoute:
+    handler: dist/handlers/v1/routes/id/getRoute.handler
+    events:
+      - http:
+          path: /api/v1/routes/{id}
+          method: get
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  createRoute:
+    handler: dist/handlers/v1/routes/createRoute.handler
+    events:
+      - http:
+          path: /api/v1/routes
+          method: post
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  updateRoute:
+    handler: dist/handlers/v1/routes/id/updateRoute.handler
+    events:
+      - http:
+          path: /api/v1/routes/{id}
+          method: put
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  deleteRoute:
+    handler: dist/handlers/v1/routes/id/deleteRoute.handler
+    events:
+      - http:
+          path: /api/v1/routes/{id}
+          method: delete
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  completeRoute:
+    handler: dist/handlers/v1/routes/id/complete/completeRoute.handler
+    events:
+      - http:
+          path: /api/v1/routes/{id}/complete
+          method: patch
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  updateCompletedRoute:
+    handler: dist/handlers/v1/routes/completed/id/updateCompletedRoute.handler
+    events:
+      - http:
+          path: /api/v1/routes/completed/{id}
+          method: put
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  getAvailableTransports:
+    handler: dist/handlers/v1/routes/id/getAvailableTransports.handler
+    events:
+      - http:
+          path: /api/v1/routes/{id}/availableTransports
+          method: get
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+  assignTransportToRoute:
+    handler: dist/handlers/v1/routes/id/assignTransport/transportId/assignTransport.handler
+    events:
+      - http:
+          path: /api/v1/routes/{id}/assignTransport/{transportId}
+          method: patch
+          cors:
+            origins:
+              - '*'
+            headers:
+              - Content-Type
+              - X-Api-Key
+          private: true
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'

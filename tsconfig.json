@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "outDir": "dist",
+        "strict": true,
+        "baseUrl": "./",
+        "paths": {
+            "@db/*": [
+                "src/db/*"
+            ],
+            "@headers": ["src/headers"]
+        }
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}
